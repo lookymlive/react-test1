@@ -1,24 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 
-import { Button } from "./components";
-
-
-//batching  dosificar hace los cambios al terminar toda la logica de la funcion 
 function App() {
+  const [data, setData] = useState<{ login: string; html_url: string }[]>([]);
 
-  const [count, setCount] = useState(0)
-
-  const countMore = () => {
-    setCount((count + 3))
-    setCount((count + 4))
-    setCount((count ) => count + 1)
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://api.github.com/users/octocat');
+      const jsonData = await response.json();
+      setData([jsonData]); // Asegurarse de que jsonData sea un array
+    } catch (error) {
+      console.error(error);
+    }
   };
- // 
-    return (
-    <>
-      <Button label={`Count is ${count}`} parentMethod={countMore} />
-     
-    </>
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <h1>Datos de Octocat</h1>
+      <ul>
+        {data.map((item, index) => (
+          <li key={index}>
+            {item.login && (
+              <>
+                <strong>Nombre:</strong> {item.login}
+              </>
+            )}
+            <br />
+            {item.html_url && (
+              <>
+                <strong>URL del perfil:</strong> {item.html_url}
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
