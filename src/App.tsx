@@ -1,44 +1,20 @@
-import { useState, useEffect } from 'react';
 
-function App() {
-  const [data, setData] = useState<{ login: string; html_url: string }[]>([]);
+import './App.css';
+import { TwitterFollowCard } from './components/TwitterFollowCard.tsx';
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('https://api.github.com/users/octocat');
-      const jsonData = await response.json();
-      setData([jsonData]); // Asegurarse de que jsonData sea un array
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
+export function App() {
+
+  const formatUserName = (userName: string) =>  `@${userName}`;
 
   return (
-    <div>
-      <h1>Datos de Octocat</h1>
-      <ul>
-        {data.map((item, index) => (
-          <li key={index}>
-            {item.login && (
-              <>
-                <strong>Nombre:</strong> {item.login}
-              </>
-            )}
-            <br />
-            {item.html_url && (
-              <>
-                <strong>URL del perfil:</strong> {item.html_url}
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+    <section className="App">
+    <TwitterFollowCard formatUserName={formatUserName} isFollowing userName="lookym" name="lookymlive" />
+    <TwitterFollowCard formatUserName={formatUserName} isFollowing userName="Luisdtv" name="Luis" />
+    <TwitterFollowCard formatUserName={formatUserName} isFollowing userName="midudev" name="Miguel Angel Duran" />
+    </section>
+   
 
-export default App;
+  )
+}
